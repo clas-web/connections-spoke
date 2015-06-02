@@ -1,0 +1,29 @@
+
+.widget_text {
+	border: solid 1px #ddd;
+	padding: 0.5em;
+	margin-top: 0.5em;
+	margin-bottom: 2em;
+}
+
+
+.widget_text.no_text {
+	color:#ccc;
+	font-style:italic;
+}
+
+
+textarea.contact_entry {
+  width: 100%;
+  height: 10em;
+  margin-top:0.5em;
+}
+ 
+.cs-option {
+	padding:0.25em 0em;
+}
+
+.cs-option .radio-label {
+	display:inline-block;
+	width:100px;
+}

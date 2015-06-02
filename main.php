@@ -8,31 +8,97 @@ Author: Crystal Barton
 Author URI: http://www.crystalbarton.com
 */
 
-error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
 
-define( 'CONNECTIONS_SPOKE_PLUGIN_NAME', 'Connections Spoke' );
-define( 'CONNECTIONS_SPOKE_PLUGIN_VERSION', '1.0' );
+// Global plugin variables
+if( !defined('CONNECTIONS_SPOKE') ):
+
+define( 'CONNECTIONS_SPOKE', 'Connections Spoke' );
+
+define( 'CONNECTIONS_SPOKE_DEBUG', false );
+
 define( 'CONNECTIONS_SPOKE_PLUGIN_PATH', dirname(__FILE__) );
-define( 'CONNECTIONS_SPOKE_PLUGIN_URL', plugins_url(basename(CONNECTIONS_SPOKE_PLUGIN_PATH)) );
+define( 'CONNECTIONS_SPOKE_PLUGIN_URL', plugins_url('', __FILE__) );
 
+define( 'CONNECTIONS_SPOKE_VERSION', '2.0.0' );
+define( 'CONNECTIONS_SPOKE_OPTIONS', 'csm_options' );
+
+endif;
+
+
+// Require the Connections Spoke model.
+require_once( CONNECTIONS_SPOKE_PLUGIN_PATH.'/classes/model.php' );
+
+// Setup the Contact Widget
+require_once( CONNECTIONS_SPOKE_PLUGIN_PATH.'/classes/contact-widget/control.php' );
+ConnectionsSpokeContact_WidgetShortcodeControl::register_widget();
+
+// Make sure APL is present in order to activate plugin.
+register_activation_hook( __FILE__, array('ConnectionsSpoke_Main', 'activate_plugin') );
+
+// Setup Connections Spoke API used by Connection Hub for data requests.
 add_filter( 'query_vars', array('ConnectionsSpoke_Main', 'query_vars') );
 add_action( 'parse_request', array('ConnectionsSpoke_Main', 'parse_request') );
 
 if( is_admin() )
 {
-	add_action( 'admin_init', array('ConnectionsSpoke_Main', 'setup_actions') );
-	add_action( 'admin_menu', array('ConnectionsSpoke_Main', 'setup_admin_pages') ); 
+	// Setup the admin pages.
+	add_action( 'wp_loaded', array('ConnectionsSpoke_Main', 'load') );
 }
 
 
-///
-///
-///
+/**
+ * ConnectionsSpoke_Main
+ * 
+ * This is the main control class for the "Connections Spoke" plugin.
+ * 
+ * @package    connection-spoke
+ * @author     Crystal Barton <cbarto11@uncc.edu>
+ */
+if( !class_exists('ConnectionsSpoke_Main') ):
 class ConnectionsSpoke_Main
 {
 
 	/**
-	 * Adds plugin's tag to the list of parseable query variables.
+	 * Checks that the Admin Page Library is activated and the correct version before
+	 * activating the plugin.
+	 */
+	public static function activate_plugin()
+	{
+		if( !defined('APL') || !defined('APL_VERSION') )
+		{
+			deactivate_plugins( plugin_basename( __FILE__ ) );
+			wp_die( 'The '.CONNECTIONS_SPOKE.' plugin requires the Admin Page Library.' );
+		}
+		
+		if( version_compare(APL_VERSION, '1.0') < 0 )
+		{
+			deactivate_plugins( plugin_basename( __FILE__ ) );
+			wp_die( 'The '.CONNECTIONS_SPOKE.' plugin requires version 1.0 or greater of the Admin Page Library.' );
+		}
+	}
+	
+	
+	/**
+	 * Loads the needed files and sets up the admin pages.
+	 */
+	public static function load()
+	{
+		$model = ConnectionsSpoke_Model::get_instance();
+		$options = $model->get_options();
+		if( empty($options['connection-hub-sites']) ) return;
+		
+		require_once( dirname(__FILE__).'/admin-pages/require.php' );
+		
+		$handler = new APL_Handler( false );
+		$handler->add_page( new ConnectionsSpoke_OptionsAdminPage );
+		$handler->setup();
+	}
+	
+	
+	/**
+	 * Setup the Connections Spoke API query var.
+	 * @param   array  $query_vars  An array of vars to search for in the URL arguments.
+	 * @return  array  The altered query vars.
 	 */
 	public static function query_vars( $query_vars )
 	{
@@ -44,6 +110,7 @@ class ConnectionsSpoke_Main
 	/**
 	 * Check for the plugin's tag and if found, then process the mobile post data
 	 * from the Android device.
+	 * @param   WP  $wp  Current WordPress environment instance
 	 */
 	public static function parse_request( &$wp )
 	{
@@ -51,54 +118,17 @@ class ConnectionsSpoke_Main
 		if( array_key_exists('connections-spoke-api', $wp->query_vars) )
 		{
 			require_once(dirname(__FILE__).'/api.php');
-			ConnectionsSpoke_Api::init();
-			ConnectionsSpoke_Api::process_post();
-			ConnectionsSpoke_Api::output_data();
-			exit();
+			$api = new ConnectionsSpoke_Api;
+			$api->process();
+			$api->output();
+			exit;
 		}
-		return;
 	}
 	
 	
 	/**
-	 *
+	 * 
 	 */
-	public static function setup_admin_pages()
-	{
-	    add_menu_page(
-	    	'Connections', 
-	    	'Connections',
-	    	'administrator', 
-	    	'connections-spoke-admin-page', 
-	    	array('ConnectionsSpoke_Main', 'show_admin_page')
-	    );
-	}
-
-
-	/**
-	 * Shows the admin page for the plugin.
-	 */
-	public static function show_admin_page()
-	{
-		require_once( CONNECTIONS_SPOKE_PLUGIN_PATH.'/admin-page.php' );
-		ConnectionsSpoke_AdminPage::init();
-		ConnectionsSpoke_AdminPage::show_page();
-	}
-	
-	
-	/**
-	 * Adds the needed JavaScript and CSS files needed for the plugin.
-	 */	
-	public static function setup_actions()
-	{
-		require_once( CONNECTIONS_SPOKE_PLUGIN_PATH.'/admin-page.php' );
-		ConnectionsSpoke_AdminPage::init();
-		ConnectionsSpoke_AdminPage::setup_actions();
-	}
-	
-	
-	
-	
 	public static function get_contact_me_contents()
 	{
 		global $wpdb;
@@ -116,7 +146,7 @@ class ConnectionsSpoke_Main
 				$text = $widget['text'];
 				
 				if( $widget['filter'] )
-					$text = wpautop($text);
+					$text = wpautop( $text );
 
 				break;
 			}
@@ -125,9 +155,6 @@ class ConnectionsSpoke_Main
 		return $text;
 	}	
 	
-	
-	
-	
-	
 }
+endif;
 
