@@ -54,7 +54,7 @@ class ConnectionsSpoke_Model
 			'contact_type' 			=> 'entry',
 			'contact_entry' 		=> '',
 			'contact_entry_filter'	=> 'no',
-			'connection_hub_sites'	=> array(),
+			'connections_hub_sites'	=> array(),
 		);
 	}
 	

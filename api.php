@@ -61,7 +61,7 @@ class ConnectionsSpoke_Api
 			
 			if( $connections_hub_name && $connections_hub_url )
 			{
-				$options['connections_hub_sites'][$connections_hub_name] = $connections_hub_site_url;
+				$options['connections_hub_sites'][$connections_hub_name] = $connections_hub_url;
 				$this->model->set_options( $options );
 			}
 		}

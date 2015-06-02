@@ -55,9 +55,9 @@ class ConnectionsSpoke_OptionsAdminPage extends APL_AdminPage
 			'print_section_contact_info'
 		);
 		$this->add_section(
-			'connection_hub_sites',
+			'connections_hub_sites',
 			'Connection Hub Site(s)',
-			'print_section_connection_hub_sites'
+			'print_section_connections_hub_sites'
 		);
 	}
 	
@@ -159,12 +159,12 @@ class ConnectionsSpoke_OptionsAdminPage extends APL_AdminPage
 	}
 	
 	
-	public function print_section_connection_hub_sites( $args )
+	public function print_section_connections_hub_sites( $args )
 	{
-		apl_print( 'print_section_connection_hub_sites' );
+		apl_print( 'print_section_connections_hub_sites' );
 		
 		$options = $this->model->get_options();
-		$sites = $options['connection_hub_sites'];
+		$sites = $options['connections_hub_sites'];
 		
 		foreach( $sites as $name => $url ):
 			

@@ -85,7 +85,7 @@ class ConnectionsSpoke_Main
 	{
 		$model = ConnectionsSpoke_Model::get_instance();
 		$options = $model->get_options();
-		if( empty($options['connection-hub-sites']) ) return;
+		if( empty($options['connections_hub_sites']) ) return;
 		
 		require_once( dirname(__FILE__).'/admin-pages/require.php' );
 		
