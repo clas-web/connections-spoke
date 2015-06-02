@@ -170,7 +170,7 @@ class ConnectionsSpoke_OptionsAdminPage extends APL_AdminPage
 			
 			?>
 			<div class="connection-hub-site">
-				<a href="<?php echo $url; ?>"><?php echo $name; ?></a>
+				<a href="<?php echo $url; ?>" target="_blank"><?php echo $name; ?></a>
 			</div>
 			<?php
 		
