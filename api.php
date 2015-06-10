@@ -74,7 +74,7 @@ class ConnectionsSpoke_Api
 	public function get_connections_data()
 	{
 		$post_data = $this->model->get_post_data();
-		$contact_information = $this->model->get_contact_information();
+		list( $contact_information, $filter ) = $this->model->get_contact_information();
 		
 		$this->output = array();
 		
@@ -92,6 +92,7 @@ class ConnectionsSpoke_Api
 		}
 		
 		$this->output['contact-info'] = $contact_information;
+		$this->output['contact-info-filter'] = $filter;
 	}
 	
 	

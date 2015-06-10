@@ -258,12 +258,14 @@ class ConnectionsSpoke_Model
 		$contact_information = $options['contact_entry'];
 		$filter_contact = $options['contact_entry_filter'];
 		
-		if( $filter_contact === 'yes' )
-		{
-			$contact_information = wpautop( $contact_information );
-		}
+// 		if( $filter_contact === 'yes' )
+// 		{
+// 			$contact_information = wpautop( $contact_information );
+// 		}
 		
-		return $contact_information;
+// 		return $contact_information;
+		
+		return array( $contact_information, $filter_contact );
 	}
 
 } // class ConnectionsSpoke_Model
