@@ -128,7 +128,14 @@ class ConnectionsSpokeContact_WidgetShortcodeControl extends WidgetShortcodeCont
 			echo $args['before_title'] . $title . $args['after_title'];
 		}
 		
-		echo $this->model->get_contact_information();
+		list( $contact_information, $filter_contact ) = $this->model->get_contact_information();
+		
+		if( $filter_contact === 'yes' )
+		{
+			$contact_information = wpautop( $contact_information );
+		}
+		
+		echo $contact_information;
 		
 		echo '</div>';
 		echo $args['after_widget'];		
