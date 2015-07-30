@@ -1,6 +1,6 @@
 <?php
-
 require_once( dirname(__FILE__).'/widget-shortcode-control.php' );
+
 
 /**
  * ConnectionsSpokeContact_WidgetShortcodeControl
@@ -51,12 +51,18 @@ class ConnectionsSpokeContact_WidgetShortcodeControl extends WidgetShortcodeCont
 	 */
 	public function print_widget_form( $options )
 	{
+		global $wp_customize;
+		
 		$options = $this->merge_options( $options );
 		extract( $options );
 
-		$csm_options = $this->model->get_options();		
+		if( !isset($wp_customize) )
+		{
+			$csm_options = $this->model->get_options();
+			extract( $csm_options );
+		}
 		?>
-		
+
 		<p>
 		<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label> 
 		<br/>
@@ -67,9 +73,9 @@ class ConnectionsSpokeContact_WidgetShortcodeControl extends WidgetShortcodeCont
 		<p>
 		<label for="<?php echo $this->get_field_id( 'contact_entry' ); ?>"><?php _e( 'Contact Info:' ); ?></label> 
 		<br/>
-		<textarea name="<?php echo $this->get_field_name( 'contact_entry' ); ?>"><?php echo $csm_options['contact_entry']; ?></textarea>
+		<textarea name="<?php echo $this->get_field_name( 'contact_entry' ); ?>"><?php echo $contact_entry; ?></textarea>
 		<input type="hidden" name="<?php echo $this->get_field_name( 'contact_entry_filter' ); ?>" value="no" />
-		<input type="checkbox" name="<?php echo $this->get_field_name( 'contact_entry_filter' ); ?>" value="yes" <?php checked($csm_options['contact_entry_filter'], 'yes'); ?> />
+		<input type="checkbox" name="<?php echo $this->get_field_name( 'contact_entry_filter' ); ?>" value="yes" <?php checked($contact_entry_filter, 'yes'); ?> />
 		Automatically add paragraphs
 		</p>
 		
@@ -98,14 +104,21 @@ class ConnectionsSpokeContact_WidgetShortcodeControl extends WidgetShortcodeCont
 	 */
 	public function update( $new_options, $old_options )
 	{
+		global $wp_customize;
+
 		$widget_options = array(
 			'title'	=> $new_options['title'],
+			'contact_entry' => $new_options['contact_entry'],
+			'contact_entry_filter' => $new_options['contact_entry_filter'],
 		);
 		
-		$csm_options = $this->model->get_options();
-		$csm_options['contact_entry'] = $new_options['contact_entry'];
-		$csm_options['contact_entry_filter'] = $new_options['contact_entry_filter'];
-		$this->model->set_options( $csm_options );
+		if( !isset($wp_customize) )
+		{
+			$csm_options = $this->model->get_options();
+			$csm_options['contact_entry'] = $new_options['contact_entry'];
+			$csm_options['contact_entry_filter'] = $new_options['contact_entry_filter'];
+			$this->model->set_options( $csm_options );
+		}		
 		
 		return $widget_options;
 	}
@@ -118,6 +131,7 @@ class ConnectionsSpokeContact_WidgetShortcodeControl extends WidgetShortcodeCont
 	 */
 	public function print_control( $options, $args = null )
 	{
+		global $wp_customize;
 		extract( $options );
 		
 		echo $args['before_widget'];
@@ -128,14 +142,15 @@ class ConnectionsSpokeContact_WidgetShortcodeControl extends WidgetShortcodeCont
 			echo $args['before_title'] . $title . $args['after_title'];
 		}
 		
-		list( $contact_information, $filter_contact ) = $this->model->get_contact_information();
-		
-		if( $filter_contact === 'yes' )
+		if( !isset($wp_customize) )
+			list( $contact_entry, $contact_entry_filter ) = $this->model->get_contact_information();
+
+		if( $contact_entry_filter === 'yes' )
 		{
-			$contact_information = wpautop( $contact_information );
+			$contact_entry = wpautop( $contact_entry );
 		}
 		
-		echo $contact_information;
+		echo $contact_entry;
 		
 		echo '</div>';
 		echo $args['after_widget'];		
