@@ -32,6 +32,9 @@ class ConnectionsSpokeContact_WidgetShortcodeControl extends WidgetShortcodeCont
 		
 		parent::__construct( 'connections-contact-info', 'Contact Information', $widget_ops );
 		$this->model = ConnectionsSpoke_Model::get_instance();
+
+		// Save the widget settings to the Connections Spoke options when the customizer saves.
+		add_action( 'customize_save_after', array($this, 'theme_customizer_save') );
 	}
 	
 	
@@ -91,6 +94,8 @@ class ConnectionsSpokeContact_WidgetShortcodeControl extends WidgetShortcodeCont
 	{
 		return array(
 			'title'	=> '',
+			'contact_entry' => '',
+			'contact_entry_filter' => 'no',
 		);
 	}
 
@@ -111,16 +116,38 @@ class ConnectionsSpokeContact_WidgetShortcodeControl extends WidgetShortcodeCont
 			'contact_entry' => $new_options['contact_entry'],
 			'contact_entry_filter' => $new_options['contact_entry_filter'],
 		);
-		
+
 		if( !isset($wp_customize) )
 		{
-			$csm_options = $this->model->get_options();
-			$csm_options['contact_entry'] = $new_options['contact_entry'];
-			$csm_options['contact_entry_filter'] = $new_options['contact_entry_filter'];
-			$this->model->set_options( $csm_options );
-		}		
+			$this->save( $new_options );
+		}
 		
 		return $widget_options;
+	}
+
+
+	/**
+	 * Save the widget properties to the Connection Spoke options when the Theme Customizer saves.
+	 */
+	public function theme_customizer_save()
+	{
+		$settings = $this->get_settings();
+		$this->save( $settings[$this->number] );
+	}
+
+
+	/**
+	 * Save the options to the Connection SPoke options.
+	 * @param  Array  $options  The array of options.
+	 */
+	protected function save( $options )
+	{
+		$csm_options = $this->model->get_options();
+		if( isset($options['contact_entry']) ) 
+			$csm_options['contact_entry'] = $options['contact_entry'];
+		if( isset($options['contact_entry_filter']) ) 
+			$csm_options['contact_entry_filter'] = $options['contact_entry_filter'];
+		$this->model->set_options( $csm_options );
 	}
 	
 	
