@@ -91,8 +91,10 @@ class ConnectionsSpoke_Model
 	 */
 	public function set_options( $options )
 	{
+		$old_level = error_reporting(-1);
 		$options = $this->merge_options( $options );
-		update_option( CONNECTIONS_SPOKE_OPTIONS, $options );
+
+ 		$results = update_option( CONNECTIONS_SPOKE_OPTIONS, $options );
 	}
 
 
@@ -257,14 +259,6 @@ class ConnectionsSpoke_Model
 		$options = $this->get_options();
 		$contact_information = $options['contact_entry'];
 		$filter_contact = $options['contact_entry_filter'];
-		
-// 		if( $filter_contact === 'yes' )
-// 		{
-// 			$contact_information = wpautop( $contact_information );
-// 		}
-		
-// 		return $contact_information;
-		
 		return array( $contact_information, $filter_contact );
 	}
 

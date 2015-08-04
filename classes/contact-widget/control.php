@@ -31,10 +31,12 @@ class ConnectionsSpokeContact_WidgetShortcodeControl extends WidgetShortcodeCont
 		);
 		
 		parent::__construct( 'connections-contact-info', 'Contact Information', $widget_ops );
+//		$this->update_widget_settings();
 		$this->model = ConnectionsSpoke_Model::get_instance();
 
 		// Save the widget settings to the Connections Spoke options when the customizer saves.
 		add_action( 'customize_save_after', array($this, 'theme_customizer_save') );
+		add_action( 'wp_register_sidebar_widget', array($this, 'update_widget_settings') );
 	}
 	
 	
@@ -59,7 +61,7 @@ class ConnectionsSpokeContact_WidgetShortcodeControl extends WidgetShortcodeCont
 		$options = $this->merge_options( $options );
 		extract( $options );
 
-		if( !isset($wp_customize) )
+		if( !isset($wp_customize) || !isset($options['contact_entry']) )
 		{
 			$csm_options = $this->model->get_options();
 			extract( $csm_options );
@@ -134,6 +136,22 @@ class ConnectionsSpokeContact_WidgetShortcodeControl extends WidgetShortcodeCont
 		$settings = $this->get_settings();
 		$this->save( $settings[$this->number] );
 	}
+	
+	
+	public function update_widget_settings( $widget = null )
+	{
+		if( $widget !== null && $widget['id'] !== $this->id ) return;
+		
+		$csm_options = $this->model->get_options();
+		$settings = $this->get_settings();
+		
+		$this_settings = $settings[$this->number];
+		$this_settings['contact_entry'] = $csm_options['contact_entry'];
+		$this_settings['contact_entry_filter'] = $csm_options['contact_entry_filter'];
+		$settings[$this->number] = $this_settings;
+		
+		$this->save_settings( $settings );
+	}
 
 
 	/**
@@ -169,7 +187,7 @@ class ConnectionsSpokeContact_WidgetShortcodeControl extends WidgetShortcodeCont
 			echo $args['before_title'] . $title . $args['after_title'];
 		}
 		
-		if( !isset($wp_customize) )
+		if( !isset($wp_customize) || !isset($options['contact_entry']) )
 			list( $contact_entry, $contact_entry_filter ) = $this->model->get_contact_information();
 
 		if( $contact_entry_filter === 'yes' )
