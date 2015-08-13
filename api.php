@@ -6,7 +6,7 @@
  * This is the main control class for the Connections Spoke API.
  * 
  * @package    connection-spoke
- * @author     Crystal Barton <cbarto11@uncc.edu>
+ * @author     Crystal Barton <atrus1701@gmail.com>
  */
 if( !class_exists('ConnectionsSpoke_Api') ):
 class ConnectionsSpoke_Api

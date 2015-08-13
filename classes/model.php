@@ -7,7 +7,7 @@
  * 
  * @package    connections-spoke
  * @subpackage classes
- * @author     Crystal Barton <cbarto11@uncc.edu>
+ * @author     Crystal Barton <atrus1701@gmail.com>
  */
 if( !class_exists('ConnectionsSpoke_Model') ):
 class ConnectionsSpoke_Model

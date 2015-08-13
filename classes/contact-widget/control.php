@@ -1,5 +1,5 @@
 <?php
-require_once( dirname(__FILE__).'/widget-shortcode-control.php' );
+require_once( __DIR__.'/widget-shortcode-control.php' );
 
 
 /**
@@ -12,7 +12,7 @@ require_once( dirname(__FILE__).'/widget-shortcode-control.php' );
  * [connections_contact_info title="Contact Me"]
  * 
  * @package    clas-buttons
- * @author     Crystal Barton <cbarto11@uncc.edu>
+ * @author     Crystal Barton <atrus1701@gmail.com>
  */
 if( !class_exists('ConnectionsSpokeContact_WidgetShortcodeControl') ):
 class ConnectionsSpokeContact_WidgetShortcodeControl extends WidgetShortcodeControl

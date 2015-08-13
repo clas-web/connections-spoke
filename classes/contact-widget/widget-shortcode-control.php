@@ -6,7 +6,7 @@
  * The WidgetShortcodeControl class for widget and shortcode plugins.
  * 
  * @package    WidgetShortcodeControl
- * @author     Crystal Barton <cbarto11@uncc.edu>
+ * @author     Crystal Barton <atrus1701@gmail.com>
  */
 if( !class_exists('WidgetShortcodeControl') ):
 class WidgetShortcodeControl extends WP_Widget

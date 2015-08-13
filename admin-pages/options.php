@@ -7,7 +7,7 @@
  * 
  * @package    connection-hub
  * @subpackage admin-pages/pages
- * @author     Crystal Barton <cbarto11@uncc.edu>
+ * @author     Crystal Barton <atrus1701@gmail.com>
  */
 if( !class_exists('ConnectionsSpoke_OptionsAdminPage') ):
 class ConnectionsSpoke_OptionsAdminPage extends APL_AdminPage
