@@ -116,40 +116,11 @@ class ConnectionsSpoke_OptionsAdminPage extends APL_AdminPage
 		apl_print('print_section_contact_info');
 		
 		$options = $this->model->get_options();
-		
-		$contact_me_widget = ConnectionsSpoke_Main::get_contact_me_contents();
-		if( $contact_me_widget == null ) $options['contact_type'] = 'entry';
-
-// 		$contact_type_name 			= array( CONNECTIONS_SPOKE_OPTIONS, 'contact_type' );
 		$contact_entry_name 		= array( CONNECTIONS_SPOKE_OPTIONS, 'contact_entry' );
 		$contact_entry_filter_name	= array( CONNECTIONS_SPOKE_OPTIONS, 'contact_entry_filter' );
 		
 		?>
-<!-- 
-		<div class="cs-option">
-		<input type="radio" name=<?php apl_name_e( $contact_type_name ); ?>" value="widget" <?php checked($options['contact_type'], 'widget'); ?> <?php echo ($contact_me_widget == null ? 'disabled' : ''); ?> />
-		Contact Me Widget
-		</div>
-		
-		<?php
-			$class = 'widget_text';
-			if( $contact_me_widget == null )
-			{
-				$class .= ' no_text';
-				$contact_me_widget = 'No contact widget found.';
-			}
-		?>
-		<div class="<?php echo $class; ?>">
-			<?php echo $contact_me_widget; ?>
-		</div>
- -->
-		
-		<div class="cs-option">
-<!-- 
-		<input type="radio" name=<?php apl_name_e( $contact_type_name ); ?>" value="entry" <?php checked($options['contact_type'], 'entry'); ?> />
-		Contact Entry
-		<br/>
- -->
+
 		<textarea name="<?php apl_name_e( $contact_entry_name ); ?>" class="contact_entry"><?php echo $options['contact_entry']; ?></textarea>
 		<input type="hidden" name="<?php apl_name_e( $contact_entry_filter_name ); ?>" value="no" />
 		<input type="checkbox" name="<?php apl_name_e( $contact_entry_filter_name ); ?>" value="yes" <?php checked($options['contact_entry_filter'], 'yes'); ?> />
