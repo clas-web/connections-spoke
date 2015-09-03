@@ -56,11 +56,14 @@ class ConnectionsSpoke_Api
 		
 		if( isset($_GET['connections-hub']) )
 		{
-			list( $connections_hub_name, $connections_hub_url ) = explode( '|', $_GET['connections-hub'], 2 );
+			$connections_hub = urldecode( $_GET['connections-hub'] );
+			list( $connections_hub_name, $connections_hub_url ) = explode( '|', $connections_hub, 2 );
 			$options = $this->model->get_options();
 			
 			if( $connections_hub_name && $connections_hub_url )
 			{
+				if( !array_key_exists('connections_hub_sites', $options) )
+					$options['connections_hub_sites'] = array();
 				$options['connections_hub_sites'][$connections_hub_name] = $connections_hub_url;
 				$this->model->set_options( $options );
 			}
