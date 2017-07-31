@@ -3,9 +3,10 @@
 Plugin Name: Connections Spoke
 Plugin URI: https://github.com/clas-web/connections-spoke
 Description: Manages the data shared between the Connection Hub site(s) and a profile site.
-Version: 1.1.1
+Version: 1.2.1
 Author: Crystal Barton
 Author URI: https://www.linkedin.com/in/crystalbarton
+GitHub Plugin URI: https://github.com/clas-web/connections-spoke
 */
 
 
