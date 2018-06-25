@@ -1,6 +1,4 @@
 <?php
-require_once( __DIR__.'/widget-shortcode-control.php' );
-
 
 /**
  * ConnectionsSpokeContact_WidgetShortcodeControl
@@ -16,8 +14,7 @@ require_once( __DIR__.'/widget-shortcode-control.php' );
  */
 if( !class_exists('ConnectionsSpokeContact_WidgetShortcodeControl') ):
 class ConnectionsSpokeContact_WidgetShortcodeControl extends WidgetShortcodeControl
-{
-	
+{	
 	private $model = null;
 	
 	/**
